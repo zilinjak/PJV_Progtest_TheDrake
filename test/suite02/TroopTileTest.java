@@ -9,7 +9,10 @@ import java.lang.reflect.Modifier;
 
 import org.junit.Test;
 
-import thedrake.*;
+import thedrake.PlayingSide;
+import thedrake.StandardDrakeSetup;
+import thedrake.TroopFace;
+import thedrake.TroopTile;
 
 public class TroopTileTest {
 
@@ -21,44 +24,32 @@ public class TroopTileTest {
 			assertTrue(Modifier.isFinal(f.getModifiers()));
 		}
 	}
-
-	@Test
-	public void tileInterfaceImplementation() {
-		Troop monk = new Troop("Monk", new Offset2D(1, 1));
-
-		Tile tile1 = new TroopTile(monk, PlayingSide.BLUE, TroopFace.AVERS);
-
-		assertFalse(tile1.canStepOn());
-
-		assertTrue(tile1.hasTroop());
-	}
-
+	
 	@Test
 	public void behaviour() {
-		Troop monk = new Troop("Monk", new Offset2D(1, 1));
-		Troop drake = new Troop("Drake");
-
-		TroopTile tile1 = new TroopTile(monk, PlayingSide.BLUE, TroopFace.AVERS);
-		TroopTile tile2 = new TroopTile(drake, PlayingSide.ORANGE, TroopFace.REVERS);
-
+		StandardDrakeSetup setup = new StandardDrakeSetup();
+		
+		TroopTile tile1 = new TroopTile(setup.MONK, PlayingSide.BLUE, TroopFace.AVERS);
+		TroopTile tile2 = new TroopTile(setup.DRAKE, PlayingSide.ORANGE, TroopFace.REVERS);
+		
 		assertFalse(tile1.canStepOn());
 		assertFalse(tile2.canStepOn());
-
+		
 		assertTrue(tile1.hasTroop());
 		assertTrue(tile2.hasTroop());
-
-		assertSame(monk, tile1.troop());
-		assertSame(drake, tile2.troop());
-
+			
+		assertSame(setup.MONK, tile1.troop());
+		assertSame(setup.DRAKE, tile2.troop());
+		
 		assertSame(PlayingSide.BLUE, tile1.side());
 		assertSame(PlayingSide.ORANGE, tile2.side());
-
+		
 		assertSame(TroopFace.AVERS, tile1.face());
 		assertSame(TroopFace.REVERS, tile2.face());
-
+		
 		assertSame(TroopFace.REVERS, tile1.flipped().face());
 		assertSame(TroopFace.AVERS, tile2.flipped().face());
-
+		
 		assertFalse(tile1.flipped() == tile1);
 	}
 }
